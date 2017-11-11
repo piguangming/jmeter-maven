@@ -28,13 +28,9 @@
 <xsl:output method="html" indent="yes" encoding="UTF-8" doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" />
 
 <!-- Defined parameters (overrideable) -->
-<<<<<<< HEAD
-<xsl:param    name="showData" select="'n'"/>
-=======
 <xsl:param    name="showData" select="'y'"/>
->>>>>>> 7d5e0706bc26559ec798296b6cad8145c52c6602
 <xsl:param    name="titleReport" select="'Load Test Results'"/>
-<xsl:param    name="dateReport" select="'date not defined'"/>
+<xsl:param    name="dateReport" select="current-date()"/>
 
 <xsl:template match="testResults">
 	<html>

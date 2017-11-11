@@ -1,178 +1,156 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>testDemo</groupId>
-    <artifactId>bluemoon</artifactId>
-    <version>1.11</version>
-    <name>bluemoon Maven Webapp</name>
+
+    <groupId>com.performance.test</groupId>
+    <artifactId>PerformanceTest</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>PerformanceTest</name>
     <url>http://maven.apache.org</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jmeter.result.jtl.dir>${project.build.directory}/jmeter/results</jmeter.result.jtl.dir>
+        <jmeter.result.html.dir>${project.build.directory}/jmeter/html</jmeter.result.html.dir>
+        <jmeter.result.html.dir1>${project.build.directory}/jmeter/html1</jmeter.result.html.dir1>
+        <jmeter.demo.dir>${{project.basedir}/jmeter/Demo</jmeter.demo.dir>
+        <ReportName>TestReport</ReportName>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
+            <version>4.2</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>3.0-alpha-1</version>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.13</version>
-        </dependency>
-        <!-- <dependency> <groupId>org.apache.jmeter</groupId> <artifactId>ApacheJMeter_jdbc</artifactId> 
-            <version>2.11</version> </dependency> <dependency> <groupId>com.oracle</groupId> 
-            <artifactId>ojdbc14</artifactId> <version>10.2.0.5</version> </dependency> -->
-        <!-- MySql 5.5 Connector -->
-        <dependency>
-        	<groupId>org.apache.maven.plugins</groupId>
-        	<artifactId>maven-surefire-plugin</artifactId>
-        	<version>2.12.4</version>
-        	<type>maven-plugin</type>
-        </dependency>
-        <dependency>
-        	<groupId>org.apache.maven.plugins</groupId>
-        	<artifactId>maven-dependency-plugin</artifactId>
-        	<version>2.8</version>
-        	<type>maven-plugin</type>
-        	<scope>test</scope>
-        </dependency>
-    </dependencies>
-    <properties>
-        <jmeter.result.jtl.dir>${project.build.directory}\jmeter\results</jmeter.result.jtl.dir>
-        <jmeter.result.html.dir>${project.build.directory}\jmeter\html</jmeter.result.html.dir>
-        <jmeter.result.html.dir1>${project.build.directory}\jmeter\html1</jmeter.result.html.dir1>
-        <ReportName>TestReport</ReportName>
-    </properties>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>Codehaus repository</id>
-            <url>http://repository.codehaus.org/</url>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
+     </dependencies>
+
     <build>
-        <finalName>bluemoon</finalName>
         <plugins>
             <plugin>
                 <groupId>com.lazerycode.jmeter</groupId>
                 <artifactId>jmeter-maven-plugin</artifactId>
-                <version>1.10.0</version>
+                <version>2.1.0</version>
                 <configuration>
-                    <resultsFileFormat>xml</resultsFileFormat>
-                    <ignoreResultFailures>true</ignoreResultFailures>
-                    <testResultsTimestamp>flase</testResultsTimestamp>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>test</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>jmeter</goal>
-                        </goals>
-                        <!-- <configuration> <resultsFileFormat>csv</resultsFileFormat> </configuration> -->
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- <plugin> <groupId>org.apache.jmeter</groupId> <artifactId>ApacheJMeter_jdbc</artifactId> 
-                <version>2.11</version> </plugin> -->
+                	<testResultsTimestamp>true</testResultsTimestamp>
+                	<resultsFileNameDateFormat>yyyyMMddHHmmss</resultsFileNameDateFormat>
+                	<appendResultsTimestamp>true</appendResultsTimestamp>
+                	<!-- 设置结果文件的保存路径 -->
+					<!--<resultsDirectory>/tmp/jmeter</resultsDirectory>-->
+					<!-- 设置结果文件的格式 -->
+					<!--<resultsFileFormat>csv</resultsFileFormat>-->
+					<!-- 该插件现在不支持读取csv格式的结果，所以如果如果结果保存是csv格式，任何错误都会被忽略 -->
+					<ignoreResultFailures>true</ignoreResultFailures>
+					<!-- 运行日志是否在控制台打印出来 -->
+           			<suppressJMeterOutput>true</suppressJMeterOutput>
+          		</configuration>
+          			 <executions>
+              			 <execution>
+                   			<id>jmeter-tests</id>
+                   			<goals>
+                       			<goal>jmeter</goal>
+                   			</goals>
+               			</execution>
+           			</executions>
+       	</plugin>
+       
+		<plugin>  
+		<groupId>org.apache.maven.plugins</groupId>  
+		<artifactId>maven-compiler-plugin</artifactId>  
+		<version>3.1</version>  
+			<configuration>  
+   				<verbose>true</verbose>  
+   				<fork>true</fork>  
+   				<executable>${JAVA_HOME}/bin/javac</executable>  
+			</configuration>  
+		</plugin> 
+      
+       <plugin>
+           <groupId>org.codehaus.mojo</groupId>
+           <artifactId>xml-maven-plugin</artifactId>
+           <version>1.0-beta-3</version>
+           <executions>
+               <execution>
+                   <phase>verify</phase>
+                   <goals>
+                       <goal>transform</goal>
+                   </goals>
+               </execution>
+           </executions>
+                           
+         <configuration>              
+           	<!-- 测试案例列表 -->
+			<testFilesIncluded>
+			<jMeterTestFile>*.jmx</jMeterTestFile>
+			<excludeJMeterTestFile>*Test.jmx</excludeJMeterTestFile>
+			<!--
+			<testFilesDirectory>${project.build.directory}\jmeter\Demo\</testFilesDirectory>
+			-->
+			</testFilesIncluded>              	
+			<!-- 定义测试报告模板 -->
+    			<transformationSets>
+        			<transformationSet>
+            		<dir>${jmeter.result.jtl.dir}</dir>
+            			<stylesheet>src\test\resources\jmeter-results-detail-report_22.xsl</stylesheet>
+            			<outputDir>${jmeter.result.html.dir}</outputDir>
+            			<fileMappers>
+                			<fileMapper
+                    implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
+                    <targetExtension>html</targetExtension>
+                </fileMapper>
+            </fileMappers>
+        </transformationSet>
 
-            <plugin> 
-              <artifactId>maven-compiler-plugin</artifactId> 
-              <configuration> 
-                  <source>1.6</source> 
-                  <target>1.6</target> 
-                  <encoding>UTF-8</encoding> 
-                  <compilerArguments> 
-                   <extdirs>src\test\jmeter\lib</extdirs> 
-                 </compilerArguments> 
-              </configuration> 
-            </plugin> 
+        <transformationSet>
+            <dir>${jmeter.result.jtl.dir}</dir>
+            <stylesheet>src\test\resources\jmeter-results-shanhe-me.xsl</stylesheet>
+            <outputDir>${jmeter.result.html.dir1}</outputDir>
+            <fileMappers>
+                <fileMapper
+                    implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
+                    <targetExtension>html</targetExtension>
+                </fileMapper>
+            </fileMappers>
+        </transformationSet>
+    </transformationSets>
+</configuration>
 
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>xml-maven-plugin</artifactId>
-                <version>1.0-beta-3</version>
-                <executions>
-                    <execution>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>transform</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <transformationSets>
-                        <transformationSet>
-                            <dir>${jmeter.result.jtl.dir}</dir>
-                            <stylesheet>src\test\resources\jmeter-results-detail-report_21.xsl</stylesheet>
-                            <outputDir>${jmeter.result.html.dir}</outputDir>
-                            <fileMappers>
-                                <fileMapper
-                                    implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
-                                    <targetExtension>html</targetExtension>
-                                </fileMapper>
-                            </fileMappers>
-                        </transformationSet>
-                        <transformationSet>
-                            <dir>${jmeter.result.jtl.dir}</dir>
-                            <stylesheet>src\test\resources\jmeter-results-shanhe-me.xsl</stylesheet>
-                            <outputDir>${jmeter.result.html.dir1}</outputDir>
-                            <fileMappers>
-                                <fileMapper
-                                    implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
-                                    <targetExtension>html</targetExtension>
-                                </fileMapper>
-                            </fileMappers>
-                        </transformationSet>
-                    </transformationSets>
-
-                </configuration>
+<!-- using XSLT 2.0 -->
+                 <dependencies>
+                   <dependency>
+                   <groupId>net.sf.saxon</groupId>
+                   <artifactId>saxon</artifactId>
+                   <version>8.7</version>
+                   </dependency>
+               </dependencies>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/jmeter/lib</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>false</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>theMainClass</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
+			
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>create-staging-area</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<copy todir="${project.build.directory}/jmeter/html">
+									<fileset dir="${project.basedir}/src/test/resources">
+										<include name="*.png"></include>
+										<exclude name="*.xsl"/>
+									</fileset>
+								</copy>
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+				
         </plugins>
-        <defaultGoal>clean</defaultGoal>
     </build>
 </project>

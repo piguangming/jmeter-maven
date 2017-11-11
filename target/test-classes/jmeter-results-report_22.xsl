@@ -21,20 +21,14 @@
 <!-- 
 	Stylesheet for processing 2.1 output format test result files 
 	To uses this directly in a browser, add the following to the JTL file as line 2:
-	<?xml-stylesheet type="text/xsl" href="../extras/jmeter-results-detail-report_21.xsl"?>
+	<? xml-stylesheet type="text/xsl" href="../extras/jmeter-results-report_21.xsl" ?>
 	and you can then view the JTL in a browser
 -->
-
+	
 <xsl:output method="html" indent="yes" encoding="UTF-8" doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" />
 
-<!-- Defined parameters (overrideable) -->
-<<<<<<< HEAD
-<xsl:param    name="showData" select="'n'"/>
-=======
-<xsl:param    name="showData" select="'y'"/>
->>>>>>> 7d5e0706bc26559ec798296b6cad8145c52c6602
-<xsl:param    name="titleReport" select="'Load Test Results'"/>
-<xsl:param    name="dateReport" select="'date not defined'"/>
+<xsl:param name="titleReport" select="'Load Test Results'"/>
+<xsl:param name="dateReport" select="'date not defined'"/>
 
 <xsl:template match="testResults">
 	<html>
@@ -71,62 +65,7 @@
 				.Failure {
 					font-weight:bold; color:red;
 				}
-				
-	
-				img
-				{
-				  border-width: 0px;
-				}
-				
-				.expand_link
-				{
-				   position=absolute;
-				   right: 0px;
-				   width: 27px;
-				   top: 1px;
-				   height: 27px;
-				}
-				
-				.page_details
-				{
-				   display: none;
-				}
-                                
-                                .page_details_expanded
-                                {
-                                    display: block;
-                                    display/* hide this definition from  IE5/6 */: table-row;
-                                }
-
-
 			</style>
-			<script language="JavaScript"><![CDATA[
-                           function expand(details_id)
-			   {
-			      
-			      document.getElementById(details_id).className = "page_details_expanded";
-			   }
-			   
-			   function collapse(details_id)
-			   {
-			      
-			      document.getElementById(details_id).className = "page_details";
-			   }
-			   
-			   function change(details_id)
-			   {
-			      if(document.getElementById(details_id+"_image").src.match("expand"))
-			      {
-			         document.getElementById(details_id+"_image").src = "collapse.png";
-			         expand(details_id);
-			      }
-			      else
-			      {
-			         document.getElementById(details_id+"_image").src = "expand.png";
-			         collapse(details_id);
-			      } 
-                           }
-			]]></script>
 		</head>
 		<body>
 		
@@ -194,22 +133,22 @@
 			<td align="center">
 				<xsl:value-of select="$allFailureCount" />
 			</td>
-			<td align="center">
+			<td align="right">
 				<xsl:call-template name="display-percent">
 					<xsl:with-param name="value" select="$allSuccessPercent" />
 				</xsl:call-template>
 			</td>
-			<td align="center">
+			<td align="right">
 				<xsl:call-template name="display-time">
 					<xsl:with-param name="value" select="$allAverageTime" />
 				</xsl:call-template>
 			</td>
-			<td align="center">
+			<td align="right">
 				<xsl:call-template name="display-time">
 					<xsl:with-param name="value" select="$allMinTime" />
 				</xsl:call-template>
 			</td>
-			<td align="center">
+			<td align="right">
 				<xsl:call-template name="display-time">
 					<xsl:with-param name="value" select="$allMaxTime" />
 				</xsl:call-template>
@@ -217,7 +156,6 @@
 		</tr>
 	</table>
 </xsl:template>
-
 <xsl:template name="pagelist">
 	<h2>Pages</h2>
 	<table align="center" class="details" border="0" cellpadding="5" cellspacing="2" width="95%">
@@ -229,7 +167,6 @@
 			<th>Average Time</th>
 			<th>Min Time</th>
 			<th>Max Time</th>
-			<th></th>
 		</tr>
 		<xsl:for-each select="/testResults/*[not(@lb = preceding::*/@lb)]">
 			<xsl:variable name="label" select="@lb" />
@@ -256,14 +193,7 @@
 					</xsl:choose>
 				</xsl:attribute>
 				<td>
-				<xsl:if test="$failureCount > 0">
-				  <a><xsl:attribute name="href">#<xsl:value-of select="$label" /></xsl:attribute>
-				  <xsl:value-of select="$label" />
-				  </a>
-				</xsl:if>
-				<xsl:if test="0 >= $failureCount">
-				  <xsl:value-of select="$label" />
-				</xsl:if>
+					<xsl:value-of select="$label" />
 				</td>
 				<td align="center">
 					<xsl:value-of select="$count" />
@@ -291,44 +221,7 @@
 						<xsl:with-param name="value" select="$maxTime" />
 					</xsl:call-template>
 				</td>
-				<td align="center">
-				   <a href="">
-				      <xsl:attribute name="href"><xsl:text/>javascript:change('page_details_<xsl:value-of select="position()" />')</xsl:attribute>
-				      <img src="expand.png" alt="expand/collapse"><xsl:attribute name="id"><xsl:text/>page_details_<xsl:value-of select="position()" />_image</xsl:attribute></img>				      
-				   </a>
-				</td>
 			</tr>
-			
-                        <tr class="page_details">
-                           <xsl:attribute name="id"><xsl:text/>page_details_<xsl:value-of select="position()" /></xsl:attribute>
-                           <td colspan="8" bgcolor="#FF0000">
-                              <div align="center">
-			         <b>Details for Page "<xsl:value-of select="$label" />"</b>
-			         <table bordercolor="#000000" bgcolor="#2674A6" border="0"  cellpadding="1" cellspacing="1" width="95%">
-			         <tr>
-			            <th>Thread</th>
-			            <th>Iteration</th>
-			            <th>Time (milliseconds)</th>
-			            <th>Bytes</th>
-			            <th>Success</th>
-			         </tr>
-			         		         
-			         <xsl:for-each select="../*[@lb = $label and @tn != $label]">			         			            
-			            <tr>
-			               <td><xsl:value-of select="@tn" /></td>
-			               <td align="center"><xsl:value-of select="position()" /></td>
-			               <td align="right"><xsl:value-of select="@t" /></td>
-			               <!--  TODO allow for missing bytes field -->
-			               <td align="right"><xsl:value-of select="@by" /></td>
-			               <td align="center"><xsl:value-of select="@s" /></td>
-			            </tr>
-			         </xsl:for-each>
-			         
-			         </table>
-			      </div>
-                           </td>
-                        </tr>
-			
 		</xsl:for-each>
 	</table>
 </xsl:template>
@@ -344,24 +237,18 @@
 			<xsl:variable name="failureCount" select="count(../*[@lb = current()/@lb][attribute::s='false'])" />
 
 			<xsl:if test="$failureCount > 0">
-				<h3><xsl:value-of select="@lb" /><a><xsl:attribute name="name"><xsl:value-of select="@lb" /></xsl:attribute></a></h3>
+				<h3><xsl:value-of select="@lb" /></h3>
 
 				<table align="center" class="details" border="0" cellpadding="5" cellspacing="2" width="95%">
 				<tr valign="top">
 					<th>Response</th>
 					<th>Failure Message</th>
-					<xsl:if test="$showData = 'y'">
-					   <th>Response Data</th>
-					</xsl:if>
 				</tr>
 			
 				<xsl:for-each select="/testResults/*[@lb = current()/@lb][attribute::s='false']">
 					<tr>
 						<td><xsl:value-of select="@rc | @rs" /> - <xsl:value-of select="@rm" /></td>
 						<td><xsl:value-of select="assertionResult/failureMessage" /></td>
-						<xsl:if test="$showData = 'y'">
-							<td><xsl:value-of select="./binary" /></td>
-						</xsl:if>
 					</tr>
 				</xsl:for-each>
 				
